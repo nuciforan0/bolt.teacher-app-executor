@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://learningcom.github.io/ltitest/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>COMPARE TOOL</title>
+    <script src="bundle.js"></script>
+</head>
+
+<body>
+  Your username:
+  <input type="text" id="user_id1" name="user_id1" value="student_1" />
+  <div>
+    <input type="radio" id="staff" name="role" value="Instructor" />
+    <label for="staff">Staff</label>
+    <input type="radio" id="student" name="role" value="Student" checked />
+    <label for="student">Student</label>
+  </div>
+    <form id="ltiForm" action="http://localhost:5000/launch" method="POST">
+      <button type="button" onClick="sendLTI()" form="ltiForm">Start/Resume Activity</button>
+    </form>
+
+    <script>
+
+    document.getElementById('user_id1').value = "user_" + Math.floor((Math.random() * 1000) + 1);
+
+    function sendLTI(){
+  var user_id_var = document.getElementById('user_id1').value;
+  var role = document.querySelector('input[name="role"]:checked').value; // Get the selected role
+  var oauth = require('oauth-sign');
+  var action = 'http://localhost:5000/launch';
+  var method = 'POST';
+  var timestamp = Math.round(Date.now() / 1000);
+
+  var params = {
+      // LTI Required Parameters
+      custom_component_display_name: 'LTI Consumer',
+      lti_message_type: 'basic-lti-launch-request',
+      lti_version: 'LTI-1p0',
+      roles: role, // Use the selected role
+      user_id: user_id_var,
+      context_id: 'course-v1:Test',
+      context_title: 'Testing LTI Tool Builder',
+      launch_presentation_return_url: '',
+      context_label: 'UQx',
+      lis_result_sourcedid: "course-v1:1010",
+      launch_presentation_locale: 'en',
+      resource_link_id: 'link',
+      // OAuth 1.0a Required Parameters
+      oauth_consumer_key: 'AUTOLTI',
+      oauth_nonce: btoa(timestamp),
+      oauth_signature_method: 'HMAC-SHA1',
+      oauth_timestamp: timestamp,
+      oauth_version: '1.0'
+  };
+
+  var signature = oauth.hmacsign(method, action, params, '123456');
+  params.oauth_signature = signature;
+
+  var form = document.querySelector("#ltiForm");
+  form.action = action;
+  form.method = method;
+  for (var name in params) {
+      var node = document.createElement("input");
+      node.name = name;
+      node.type = 'hidden';
+      node.value = params[name];
+      form.appendChild(node);
+  }
+
+  document.getElementById("ltiForm").submit();
+}
+
+
+        /*
+        var output = document.querySelector("code");
+        output.textContent = JSON.stringify(params, null, 2);
+        console.log(form);
+
+        var meta = document.querySelector("body > script");
+        console.log(meta);
+        */
+    </script>
+
+
+
+</body></html>
