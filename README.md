@@ -26,6 +26,8 @@ This is how to run the applications which are made by the bolt.teacher applicati
   ```
   
   6. Open the LMS LTI 1.0 sim/launchurl.html and open that in a **google chrome** browser
-  7. If it is compliant with the LMS, it should load. Hopefully, it should also not have an "LTI Simulator" entry page, or ways to log out in this deployed state. Any AI features should also work in this deployed state.
-     However, AI isn't perfect and this functionality which wasn't present in the preview is not guaranteed.
+  7. If it is compliant with the LMS, it should load.
+ 
+ It should also act as it would in an LMS environment, so it should not show the "LTI Simulator" which was present in the preview page, have ways to log out either, and AI features should be compatible with this.
+     However, AI isn't perfect and this functionality which wasn't present in the preview is not always guaranteed. As model capabilities increase and it better follows instructions it should get better at this. 
    
